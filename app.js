@@ -185,6 +185,7 @@ app.get('/student/dashboard', async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
 app.get('/login', (req, res) => {
     res.render('login');
   });
@@ -233,6 +234,8 @@ app.get('/login', (req, res) => {
 });
 
 
+=======
+>>>>>>> 2752f76f10647346eb977b63e0055ea72ad9f776
 // Student Update Details
 app.get('/student/update', async (req, res) => {
     try {
@@ -964,6 +967,10 @@ app.get('/about', (req, res) => {
 );
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2752f76f10647346eb977b63e0055ea72ad9f776
 // Server Strating Port No.
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
