@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Teacher Dashboard</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            height: 100vh;
+            /* Ensure body is full height */
+            overflow: hidden;
+            /* Prevent body scroll */
+        }
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        aside {
+            width: 250px;
+            background-color: #004d74;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100%;
+        }
+
+        aside .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        aside nav {
+            width: 100%;
+        }
+
+        aside nav ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        aside nav ul li {
+            margin-bottom: 20px;
+        }
+
+        aside nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        aside nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        aside nav ul li a .icon {
+            margin-right: 10px;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; /* Allow vertical scrolling in main area */
+        }
+
+        .welcome-banner {
+            background-color: #004d74;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-banner img {
+            width: 100px;
+        }
+
+        .daily-notice p {
+            margin: 10px 0;
+        }
+
+        .scrolling-container {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .placement-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .placement-item h3 {
+            margin: 0 0 10px;
+        }
+
+        .column {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .column:last-child {
+            margin-right: 0;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .details-container {
+                flex-direction: column;
+            }
+
+            .column {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .column:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+
+        .details-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-style: double;
+            padding: 20px;
+            border-radius: 10px;
+
+
+        }
+
+        .details-container .column {
+            margin-bottom: 20px;
+        }
+
+        .details-container .column:last-child {
+            margin-bottom: 0;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .navbar-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            margin-left: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .navbar-photo:hover {
+            border-color: #ccc;
+        }
+
+        .profile-text {
+            margin-left: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .welcome-banner .navbar-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+        }
+
+        .blinking-notice {
+            color: red;
+            background-color: yellow;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            animation: blink-animation 1s steps(5, start) infinite;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        /* footer {
+            background-color: #0a4d7c;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 1;
+            position: relative;
+        } */
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside>
+            <div class="logo">Teacher Dashboard</div>
+            <nav>
+                <ul>
+                    <li><a href="#" style="text-decoration: underline;"><span class="icon">🏠</span>Dashboard</a></li>
+                    <li><a href="/view_student"><span class="icon">📝</span>  Current Student Status</a></li>
+                    <li><a href="/view-placement-details"><span class="icon">📅</span>View Placement Drives</a></li>
+                    <li><a href="/add-placement-drive"><span class="icon">📝</span>Add Placement Drives</a></li>
+                    <li><a href="/report"><span class="icon">📝</span>Placement Report</a></li>
+                    <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
+                    <li><a href="/teacher/logout"><span class="icon">🚪</span>Log-Out</a></li>
+                </ul>
+            </nav>
+            <div class="daily-notice blinking-notice">
+                <h3>Notice</h3>
+                <div id="latest-drive"></div>
+                <p> To View Current PLacement </p>
+                <a href="/view-placement-details" class="blinking-notice">Click Here.</a>
+            </div>
+        </aside>
+        <main>
+            <section class="welcome-banner">
+                <div>
+                    <h2>Welcome <%= teacher.name %>!</h2>
+                    <p>Always stay updated in your portal</p>
+                </div>
+            </section>
+            <% if (!teacher) { %>
+                <section>
+                    <p>You are not logged in. Please <a href="/teacher/login">log in</a>.</p>
+                </section>
+                <% } else { %>
+                    <section id="teacher-details">
+                        <h2>Teacher Details</h2>
+                        <hr>
+                        <div class="details-container">
+                            <div class="column">
+                                <b><label for="name">Name:</b>
+                                <%= teacher.name %></label>
+                                    <br><br>
+                                    <b><label for="email">Email:</b>
+                                    <%= teacher.email %></label>
+                                        <br><br>
+                                        <b><label for="department">Department:</b>
+                                        <%= teacher.department %> </label>
+                                            <br><br>
+
+                            </div>
+                            <div class="column">
+                                <b><label for="phoneNumber">Phone Number:</b>
+                                <%= teacher.phone %></label>
+                                    <br><br>
+                                    <b><label for="experience">Experience (Years):</b>
+                                    <%= teacher.experience %></label>
+                                        <br><br>
+                                        <b><label for="qualification">Qualification:</b>
+                                        <%= teacher.qualification %></label>
+                                            <br><br>
+                            </div>
+                        </div>
+                    </section>
+                    <% } %>
+
+                        <section id="upcoming-placement-drives">
+                            <h2>Upcoming Placement Drives</h2>
+                            <hr>
+                            <div class="scrolling-container">
+                                <% const upcomingPlacements=placements .filter(placement=> new Date(placement.date) >=
+                                    new
+                                    Date())
+                                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                                    .slice(0, 3);
+                                    upcomingPlacements.forEach(function(placement) { %>
+                                    <div class="placement-item">
+                                        <h3>
+                                            <%= placement.companyName %>
+                                        </h3>
+                                        <p><strong>Job Profile:</strong>
+                                            <%= placement.jobProfile %>
+                                        </p>
+                                        <p><strong>Description:</strong>
+                                            <%= placement.description %>
+                                        </p>
+                                        <p><strong>Location:</strong>
+                                            <%= placement.location %>
+                                        </p>
+                                        <p><strong>Date:</strong>
+                                            <%= placement.date %>
+                                        </p>
+                                    </div>
+                                    <% }); %>
+                            </div>
+
+
+                        </section>
+                        <br><br><br>
+                        <%- include('footer.ejs') %>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileTrigger = document.querySelector('.profile-text');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+
+            function toggleDropdown() {
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            }
+
+            profileTrigger.addEventListener('click', toggleDropdown);
+
+            document.addEventListener('click', function (event) {
+                if (!profileTrigger.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

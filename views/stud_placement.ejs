@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
+    <title>Placement Drives</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        aside {
+            width: 250px;
+            background-color: #004d74;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100%;
+        }
+
+        aside .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        aside nav {
+            width: 100%;
+        }
+
+        aside nav ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        aside nav ul li {
+            margin-bottom: 20px;
+        }
+
+        aside nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        aside nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        aside nav ul li a .icon {
+            margin-right: 10px;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .welcome-banner {
+            background-color: #004d74;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-banner img {
+            width: 100px;
+        }
+
+        .navbar-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            margin-left: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .navbar-photo:hover {
+            border-color: #ccc;
+        }
+
+        .welcome-banner .navbar-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+        }
+
+        .daily-notice p {
+            margin: 10px 0;
+        }
+
+        .blinking-notice {
+            color: red;
+            background-color: yellow;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            animation: blink-animation 1s steps(5, start) infinite;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        .table-container {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .details-container {
+                flex-direction: column;
+            }
+
+            .column {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .column:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside>
+            <div class="logo">Placement Drives</div>
+            <nav>
+                <ul>
+                    <li><a href="/student/dashboard"><span class="icon">🏠</span>Dashboard</a></li>
+                    <li><a href="/student/update"><span class="icon">📝</span>Update Personal Details</a></li>
+                    <li><a href="#" style="text-decoration: underline;"><span class="icon">📅</span>View Placement
+                            Drives</a></li>
+                    <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
+                    <li><a href="/logout"><span class="icon">🚪</span>Log-Out</a></li>
+                </ul>
+            </nav>
+            <div class="daily-notice blinking-notice">
+                <h3>Notice</h3>
+                <div id="latest-drive"></div>
+                <p> To View Current PLacement </p>
+                <a href="/view-placement-details" class="blinking-notice">Click Here.</a>
+            </div>
+        </aside>
+        <main>
+            <section class="welcome-banner">
+                <div>
+                    <h2>Welcome <%= student.name %>!</h2>
+                    <p>Always stay updated in your portal</p>
+                </div>
+                <img src="/<%= student.photo %>" alt="Student Photo" class="navbar-photo">
+            </section>
+
+            <div class="table-container">
+                <table id="placementTable" class="display nowrap">
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Profile</th>
+                            <th>Description</th>
+                            <th>Location</th>
+                            <th>Date</th>
+                            <th>Apply</th>
+                            <th>link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% placements.forEach(placement => { %>
+                            <tr class="placement">
+                                <td><%= placement.companyName %></td>
+                                <td><%= placement.jobProfile %></td>
+                                <td><%= placement.description %></td>
+                                <td><%= placement.location %></td>
+                                <td><%= placement.date %></td>
+                                <td><button onclick="apply('<%= placement.companyName %>', '<%= placement.jobProfile %>', this)">Apply</button></td>
+                                <td><a onclick="link('<%= placement.link %>')" href="javascript:void(0);"><%= placement.link %></a></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <br><br><br>
+            <%- include('footer.ejs') %>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+
+    <script>
+        function link(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'http://' + url;
+            }
+            window.location.href = url;
+        }
+
+        $(document).ready(function () {
+            if (!$.fn.dataTable.isDataTable('#placementTable')) {
+                $('#placementTable').DataTable({
+                    "scrollX": true
+                });
+            }
+            checkAppliedStatus();
+        });
+
+        function checkAppliedStatus() {
+            $('.placement').each(function () {
+                var companyName = $(this).find('td:eq(0)').text();
+                var jobProfile = $(this).find('td:eq(1)').text();
+                var applyButton = $(this).find('td:eq(5) button');
+
+                $.ajax({
+                        type: 'GET',
+                        url: '/checkApplied',
+                        data: { companyName: companyName, jobProfile: jobProfile },
+                        success: function (response) {
+                            if (response.applied) {
+                                applyButton.text('Applied');
+                                applyButton.prop('disabled', true);
+                            } else {
+                                applyButton.prop('disabled', false);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error checking applied status:', error);
+                        }
+                    });
+            });
+        }
+
+        function apply(companyName, jobProfile, button) {
+            $.ajax({
+                type: 'POST',
+                url: '/saveCompany',
+                data: { companyName: companyName, jobProfile: jobProfile },
+                success: function (response) {
+                    console.log('Company name saved successfully');
+                    $(button).text('Applied');
+                    $(button).prop('disabled', true);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error saving company name:', error);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

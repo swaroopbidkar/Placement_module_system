@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Placement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Your existing styles */
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+        aside {
+            width: 250px;
+            background-color: #004d74;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100%;
+        }
+        aside .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+        aside nav {
+            width: 100%;
+        }
+        aside nav ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+        aside nav ul li {
+            margin-bottom: 20px;
+        }
+        aside nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+        aside nav ul li a:hover {
+            text-decoration: underline;
+        }
+        aside nav ul li a .icon {
+            margin-right: 10px;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .welcome-banner {
+            background-color: #004d74;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-banner img {
+            width: 100px;
+        }
+
+        .welcome-banner .navbar-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <aside>
+        <div class="logo">
+            <% if (teacherId) { %>
+                Teacher Dashboard
+            <% } else if (companyId) { %>
+                Company Dashboard
+            <% } %>
+        </div>
+        <nav>
+            <ul>
+                <% if (teacherId) { %>
+                    <!-- Teacher Navbar -->
+                    <li><a href="/teacher/dashboard"><span class="icon">🏠</span>Dashboard</a></li>
+                    <li><a href="/view-student-status"><span class="icon">📝</span>Current Student Status</a></li>
+                    <li><a href="/view-placement-details"><span class="icon">📅</span>View Placement Drives</a></li>
+                    <li><a href="/add-placement-drive"><span class="icon">📝</span>Add Placement Drives</a></li>
+                    <li><a href="/report"><span class="icon">📝</span>Placement Report</a></li>
+                    <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
+                    <li><a href="/teacher/logout"><span class="icon">🚪</span>Log-Out</a></li>
+                <% } else if (companyId) { %>
+                    <!-- Company Navbar -->
+                    <li><a href="#" style="text-decoration: underline;"><span class="icon">🏠</span>Dashboard</a></li>
+                    <li><a href="/add-placement-drive"><span class="icon">📝</span>Add Placement Drive</a></li>
+                    <li><a href="/view-placement-details"><span class="icon">📝</span>View Placement
+                        Drive</a></li>
+                        <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
+                        <li><a href="/company/logout"><span class="icon">🚪</span>Log-Out</a></li>
+                <% } %>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        <section class="welcome-banner">
+            <div>
+                <h2>Welcome!</h2>
+                <p>Always stay updated in your portal</p>
+            </div>
+        </section>
+        <div class="container">
+            <h1>Edit Placement</h1>
+            <form action="/update-placement" method="POST">
+                <input type="hidden" name="id" value="<%= placement._id %>">
+
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName" name="companyName" value="<%= placement.companyName %>" readonly required>
+
+                <label for="jobProfile">Profile:</label>
+                <input type="text" id="jobProfile" name="jobProfile" value="<%= placement.jobProfile %>" required>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required><%= placement.description %></textarea>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" value="<%= placement.location %>" required>
+
+                <label for="date">Date:</label>
+                <input type="datetime-local" id="date" name="date" value="<%= placement.date.toISOString().split('T')[0] %>" required>
+
+                <label for="link">Link:</label>
+                <input type="text" id="link" name="link" value="<%= placement.link %>" required>
+
+                <button type="submit">Update Placement</button>
+                <button type="button" onclick="window.location.href='/view-placement-details'">Cancel</button>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>
