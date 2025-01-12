@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>View Students</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            height: 100vh; /* Ensure body is full height */
+            overflow: hidden; /* Prevent body scroll */
+        }
+
+        /* Wrapper to maintain the full height layout */
+        .wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Aside navigation Bar */
+        aside {
+            width: 250px;
+            background-color: #004d74;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100%;
+        }
+
+        aside .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        aside nav {
+            width: 100%;
+        }
+
+        aside nav ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        aside nav ul li {
+            margin-bottom: 20px;
+        }
+
+        aside nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        aside nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        aside nav ul li a .icon {
+            margin-right: 10px;
+        }
+
+        /* Main content area */
+        main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; /* Allow vertical scrolling in main area */
+        }
+
+        /* Welcome Top Banner */
+        .welcome-banner {
+            background-color: #004d74;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Blinking Notice */
+        .blinking-notice {
+            color: red;
+            background-color: yellow;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            animation: blink-animation 1s steps(5, start) infinite;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        /* Excel Download Button */
+        .download-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .large-button {
+            display: inline-block;
+            font-size: 18px;
+            padding: 20px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .large-button:hover {
+            background-color: #0056b3;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Table CSS */
+        .table-container {
+
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; /* Allow horizontal scrolling in table container */
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        /* Chart container */
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .details-container {
+                flex-direction: column;
+            }
+
+            .column {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .column:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside>
+            <div class="logo">View Students</div>
+            <nav>
+                <ul>
+                    <li><a href="/teacher/dashboard" ><span class="icon">🏠</span>Dashboard</a></li>
+                    <li><a href="#" style="text-decoration: underline;"><span class="icon">📝</span>  Current Student Status</a></li>
+                    <li><a href="/view-placement-details"><span class="icon">📅</span>View Placement Drives</a></li>
+                    <li><a href="/add-placement-drive"><span class="icon">📝</span>Add Placement Drives</a></li>
+                    <li><a href="/report"><span class="icon">📝</span>Placement Report</a></li>
+                    <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
+                    <li><a href="/teacher/logout"><span class="icon">🚪</span>Log-Out</a></li>
+                </ul>
+            </nav>
+            <div class="daily-notice blinking-notice">
+                <h3>Notice</h3>
+                <div id="latest-drive"></div>
+                <p> To View Current PLacement </p>
+                <a href="/view-placement-details" class="blinking-notice">Click Here.</a>
+            </div>
+        </aside>
+        <main>
+            <section class="welcome-banner">
+                <div>
+                    <h2>Welcome <%= teacher.name %>!</h2>
+                    <p>Always stay updated in your portal</p>
+                </div>
+            </section>
+            <div class="download-button">
+                <a href="/view_student/download">
+                    <button class="large-button"><strong>Download Excel</strong></button>
+                </a>
+            </div>
+            <br>
+            <div class="table-container">
+                <table id="placementTable" class="display nowrap">
+                    <thead>
+                        <tr>
+                            <!-- <th>Roll No</th> -->
+                            <th>Name</th>
+                            <th>Email</th>
+                            <!-- <th>Age</th> -->
+                            <th>Graduation CGPA</th>
+                            <th>Post Graduation CGPA</th>
+                            <th>Phone Number</th>
+                            <!-- <th>Experience</th> -->
+                            <th>Placement Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% students.forEach(student => { %>
+                            <tr>
+                                <!-- <td><%= student.roll %></td> -->
+                                <td>
+                                    <%= student.name %>
+                                </td>
+                                <td>
+                                    <%= student.email %>
+                                </td>
+                                <!-- <td><%= student.age %></td> -->
+                                <td>
+                                    <%= student.graduation %>
+                                </td>
+                                <td>
+                                    <%= student.pgraduation %>
+                                </td>
+                                <td>
+                                    <%= student.phoneNumber %>
+                                </td>
+                                <!-- <td><%= student.experience %></td> -->
+                                <td>
+                                    <%= student.placementStatus %>
+                                </td>
+                                <td>
+                                    <button onclick="deletePlacement('<%= student._id %>')">
+                                        <i class="fa fa-trash" aria-hidden="true" style="color: red;"></i>
+                                    </button>
+                                    <button onclick="window.location.href='/edit-student/<%= student._id %>'">
+                                        <i class="fa-regular fa-pen-to-square" style="color: grey;"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart-container">
+                <canvas id="placementChart"></canvas>
+            </div>
+            <%- include('footer.ejs') %>
+        </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+
+    <script>
+        document.getElementById('delete-icon').addEventListener('click', function() {
+          var button = document.getElementById('delete-icon');
+          if (button) {
+            button.remove();
+            alert('Deleted');
+          }
+        });
+      </script>>
+    
+    <script>
+        $(document).ready(function () {
+            $('#placementTable').DataTable({
+                "scrollX": true
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('placementChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Placed', 'Not Placed'],
+                datasets: [{
+                    label: 'Placement Status',
+                    data: [<%= placedCount %> , <%= notPlacedCount %>],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 99, 132, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false // Allows manual control over the chart size
+            }
+        });
+        
+        // Set the size of the canvas
+        document.getElementById('placementChart').style.width = '300px';
+        document.getElementById('placementChart').style.height = '300px';
+    </script>
+    <script>
+        function deletePlacement(studentId) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                $.ajax({
+                    url: '/deletestudent',  // Replace with your actual delete endpoint
+                    method: 'POST',
+                    data: { id: studentId },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Student deleted successfully');
+                            location.reload();
+                        } else {
+                            alert('Failed to delete student');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error deleting student', error);
+                        alert('Failed to delete student');
+                    }
+                });
+            }
+        }
+    </script>
+
+</body>
+
+</html>

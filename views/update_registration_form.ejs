@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Update Personal Details</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            height: 100vh;
+            /* Ensure body is full height */
+            overflow: hidden;
+            /* Prevent body scroll */
+        }
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        aside {
+            width: 250px;
+            background-color: #004d74;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100%;
+        }
+
+        aside .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        aside nav {
+            width: 100%;
+        }
+
+        aside nav ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        aside nav ul li {
+            margin-bottom: 20px;
+        }
+
+        aside nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        aside nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        aside nav ul li a .icon {
+            margin-right: 10px;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            /* Allow vertical scrolling in main area */
+        }
+
+        .welcome-banner {
+            background-color: #004d74;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-banner img {
+            width: 100px;
+        }
+
+        .daily-notice p {
+            margin: 10px 0;
+        }
+
+        .scrolling-container {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .placement-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .placement-item h3 {
+            margin: 0 0 10px;
+        }
+
+        .column {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .column:last-child {
+            margin-right: 0;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .details-container {
+                flex-direction: column;
+            }
+
+            .column {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .column:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+
+        .details-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-style: double;
+            padding: 20px;
+            border-radius: 10px;
+
+
+        }
+
+        .details-container .column {
+            margin-bottom: 20px;
+        }
+
+        .details-container .column:last-child {
+            margin-bottom: 0;
+        }
+
+        .navbar-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            margin-left: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .navbar-photo:hover {
+            border-color: #ccc;
+        }
+
+        .profile-text {
+            margin-left: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .welcome-banner .navbar-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+        }
+
+        .blinking-notice {
+            color: red;
+            background-color: yellow;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            animation: blink-animation 1s steps(5, start) infinite;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .form-table th,
+        .form-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .form-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .form-table td {
+            background-color: #ffffff;
+        }
+
+        .form-table label {
+            display: inline-block;
+            width: 200px;
+            height: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            /* Add a border */
+            border-radius: 5px;
+            /* Rounded corners */
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            /* Spacing between inputs */
+            font-size: 16px;
+            /* Font size */
+        }
+
+        /* Style for select dropdown arrow */
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#444444" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-size: 12px;
+            background-position: right 10px center;
+            background-repeat: no-repeat;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        button[type="submit"] {
+            background-color: #004d74;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #003354;
+        }
+
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside>
+            <div class="logo">Update Details</div>
+            <nav>
+                <ul>
+                    <li><a href="/student/dashboard"><span class="icon">🏠</span>Dashboard</a></li>
+                    <li><a href="#" style="text-decoration: underline;"><span class="icon">📝</span>Update Personal
+                            Details</a></li>
+                    <li><a href="/view-placement-details"><span class="icon">📅</span>View Placement Drives</a></li>
+                    <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
+                    <li><a href="/logout"><span class="icon">🚪</span>Log-Out</a></li>
+                </ul>
+            </nav>
+            <div class="daily-notice blinking-notice">
+                <h3>Notice</h3>
+                <div id="latest-drive"></div>
+                <p> To View Current PLacement </p>
+                <a href="/view-placement-details" class="blinking-notice">Click Here.</a>
+            </div>
+        </aside>
+        <main>
+            <section class="welcome-banner">
+                <div>
+                    <h2>Welcome <%= students.name %>!</h2>
+                    <p>Always stay updated in your portal</p>
+                </div>
+                <img src="/<%= students.photo %>" alt="Student Photo" class="navbar-photo">
+            </section>
+
+            <form action="/student/update" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <table class="form-table">
+                    <tr>
+                        <th colspan="2">Personal Information</th>
+                    </tr>
+                    <tr>
+                        <td><label for="name"><i class="fa-solid fa-user"></i> Name:<span
+                                    class="required">*</span></label></td>
+                        <td><input type="text" id="name" name="name" value="<%= students.name %>" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="roll"><i class="fa-solid fa-list-ol"></i> Roll No:<span class="required">*</span></label></td>
+                        <td><input type="number" id="roll" name="roll" value="<%= students.roll %>" maxlength="3" readonly required></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><label for="email"><i class="fa fa-envelope" aria-hidden="true"></i> Email:<span
+                                    class="required">*</span></label></td>
+                        <td><input type="email" id="email" name="email" value="<%= students.email %>" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="academicyear"><i class="fa-solid fa-percent"></i> Academic Year:</label></td>
+                        <td><select id="academicyear" name="academicyear" value="<%= students.academicyear %>" required>
+                            <option value="<%= students.academicyear %>">
+                                <%= students.academicyear %>
+                            </option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                            <option value="2031">2031</option>
+                        </select>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td><label for="phoneNumber"><i class="fa fa-phone" aria-hidden="true"></i> Phone Number:
+                                Eg.:1234567890<span class="required">*</span></label></td>
+                        <td><input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}"
+                                value="<%= students.phoneNumber %>" required></td>
+                    </tr>
+
+                    <th colspan="2">Academic Information</th>
+                    </tr>
+                    <tr>
+                        <td><label for="tenthPercentage"><i class="fa-solid fa-percent"></i> 10th Percentage:<span
+                                    class="required">*</span></label></td>
+                        <td><input type="number" id="tenthPercentage" name="tenthPercentage" min="0" max="100"
+                                value="<%= students.tenthPercentage %>" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="twelfthPercentage"><i class="fa-solid fa-percent"></i> 12th Percentage:<span
+                                    class="required">*</span></label></td>
+                        <td><input type="number" id="twelfthPercentage" name="twelfthPercentage" min="0" max="100"
+                                value="<%= students.twelfthPercentage %>" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="year"><i class="fa-solid fa-award"></i> Year:<span
+                                    class="required">*</span></label></td>
+                        <td>
+                            <select id="year" name="year" value="<%= students.year %>" required>
+                                <option value="<%= students.year %>">
+                                    <%= students.year %>
+                                </option>
+                                <option value="FY">FY</option>
+                                <option value="SY">SY</option>
+                                <option value="TY">TY</option>
+                                <option value="MSC Part 1">MSC Part1</option>
+                                <option value="MSC Part 2">MSC Part2</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="department"><i class="fa-solid fa-award"></i> Course:<span
+                                    class="required">*</span></label></td>
+                        <td>
+                            <select id="department" name="department" value="<%= students.department %>" required>
+                                <option value="<%= students.department %>">
+                                    <%= students.department %>
+                                </option>
+                                    <option value="MSc Computer Science">MSc Computer Science</option>
+                                    <option value="MSc IT">MSc IT</option>
+                                    <option value="BSc Computer Science">BSc Computer Science</option>
+                                    <option value="BSc IT">BSc IT</option>
+                                </select>
+                        </td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td><label for="graduation"><i class="fa-solid fa-graduation-cap"></i> Graduation CGPA:<span
+                                    class="required">*</span></label></td>
+                        <td><input type="number" id="graduation" name="graduation" min="0" max="10" step="0.01"
+                                value="<%= students.graduation %>" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="pgraduation"><i class="fa-solid fa-graduation-cap"></i> Post Graduation
+                                CGPA:<span class="required">*</span></label></td>
+                        <td><input type="number" id="pgraduation" name="pgraduation" min="0" max="10" step="0.01"
+                                value="<%= students.pgraduation %>" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="experience"><i class="fa-solid fa-medal"></i> Experience(Years):<span
+                                    class="required">*</span></label></td>
+                        <td><input type="number" id="experience" name="experience" min="0" max="10"
+                                value="<%= students.experience %>" required></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="placementStatus"><i class="fa-solid fa-award"></i> Placement Status:<span class="required">*</span></label>
+                        </td>
+                        <td>
+                            <select id="placementStatus" name="placementStatus" required onchange="showCompanyName()">
+                                <option value="Placed" <% if (students.placementStatus==='Placed' ) { %>selected<% } %>>Placed</option>
+                                <option value="Not Placed" <% if (students.placementStatus==='Not Placed' ) { %>selected<% } %>>Not Placed</option>
+                            </select>
+                        </td>
+                    </tr>
+                    
+                    <tr id="companyNameRow" style="display: none;">
+                        <td>
+                            <label for="company">Company Name:</label>
+                        </td>
+                        <td>
+                            <input type="text" id="company" name="company" value="<%= students.company %>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Uploads</th>
+                    </tr>
+                    <tr>
+                        <td><label for="photo"><i class="fa fa-file-image" aria-hidden="true"></i> Upload Photo:</label>
+                        </td>
+                        <td>
+                            <input type="file" id="photo" name="photo" accept="image/*" value="<%= students.photo %>">
+                            <img src="/<%= students.photo %>" alt="Student Photo" class="navbar-photo">
+                            <input type="checkbox" id="keepPhoto" name="keepPhoto" value="keep" checked> Keep current photo
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="resume"><i class="fa fa-file-pdf" aria-hidden="true"></i> Upload Resume:</label>
+                        </td>
+                        <td>
+                            <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
+                            <a href="/<%= students.resume %>" target="_blank">Download Resume</a>
+                            <input type="checkbox" id="keepResume" name="keepResume" value="keep" checked> Keep current resume
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">
+                            <button type="submit">Update</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <%- include('footer.ejs') %>
+        </main>
+    </div>
+    <script>
+     window.onload = function() {
+    showCompanyName();
+};
+
+setInterval(function() {
+    showCompanyName();
+}, 100); // check every 100 milliseconds
+
+function showCompanyName() {
+    var placementStatus = document.getElementById("placementStatus").value;
+    var companyNameRow = document.getElementById("companyNameRow");
+
+    if (placementStatus === "Placed") {
+        companyNameRow.style.display = "";
+    } else {
+        companyNameRow.style.display = "none";
+    }
+}
+    </script>
+</body>
+</html>
