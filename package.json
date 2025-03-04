@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "connect-flash": "^0.1.1",
+    "docx-pdf": "^0.0.1",
+    "docxtemplater": "^3.50.0",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.9",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "jszip": "^3.10.1",
+    "mongoose": "^8.2.3",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "^0.15.0",
+    "pizzip": "^3.1.7",
+    "serve-favicon": "^2.5.0",
+    "xlsx": "^0.18.5"
+  }
+}
