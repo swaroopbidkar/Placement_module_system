@@ -26,7 +26,8 @@ const Docxtemplater = require('docxtemplater');
 const { execSync } = require('child_process');
 const PizZip = require('pizzip'); // Replace JSZip with PizZip
 const { convertToPdf } = require('docx-pdf');
-
+const User = require('./models/User'); // Adjust path based on your project
+const router = express.Router();
 
 
 mongoose.connect('mongodb://localhost:27017/placement', {
@@ -186,6 +187,53 @@ const transporter = nodemailer.createTransport({
         pass: 'xwdsvosyjkstdeqa'  // Your Gmail password
     }
 });
+
+
+router.post('/change-password', async (req, res) => {
+    try {
+        const { oldPassword, newPassword, repeatPassword } = req.body;
+        const user = await User.findOne({ _id: req.session.userId });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if old password is correct
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.redirect('/change-password?success=incorrect');
+        }
+
+        // Check if new password matches repeat password
+        if (newPassword !== repeatPassword) {
+            return res.redirect('/change-password?success=nomatch');
+        }
+
+        // Password validation
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(newPassword)) {
+            return res.redirect('/change-password?success=weak');
+        }
+
+        // Hash and update new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.redirect('/?success=success');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
+
+
+
+
+
+
 
 app.post('/student/register', upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'resume', maxCount: 1 }]), async (req, res) => {
     const { roll, name, email, password, academicyear, placementStatus, graduation, pgraduation, experience, phoneNumber, tenthPercentage, twelfthPercentage, year, department, skills, company } = req.body;
@@ -1499,7 +1547,7 @@ app.get('/report', async (req, res) => {
 //     }
 // });
 
-
+module.exports = router;
 // Server Strating Port No.
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

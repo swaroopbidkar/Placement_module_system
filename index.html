@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Placement Drive</title>
+    <link rel="icon" href="favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <aside>
+            <div class="logo">Add Placement</div>
+            <nav>
+                <ul>
+                    <li><a href="/teacher/dashboard">🏠 Dashboard</a></li>
+                    <li><a href="/view_student">📝 Current Student Status</a></li>
+                    <li><a href="/view-placement-details">📅 View Placement Drives</a></li>
+                    <li><a href="#" style="text-decoration: underline;">📝 Add Placement Drives</a></li>
+                    <li><a href="/report">📊 Placement Report</a></li>
+                    <li><a href="/change-password">🔐 Change Password</a></li>
+                    <li><a href="/teacher/logout">🚪 Log-Out</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <section class="welcome-banner">
+                <div>
+                    <h2>Welcome, Teacher!</h2>
+                    <p>Always stay updated in your portal</p>
+                </div>
+            </section>
+
+            <center>
+                <h1>Add Placement Drives</h1>
+            </center>
+
+            <form action="/add_placement_drive" method="POST">
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName" name="companyName" required>
+
+                <label for="jobProfile">Job Profile:</label>
+                <input type="text" id="jobProfile" name="jobProfile" required>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+
+                <label for="location">Job Location:</label>
+                <input type="text" id="location" name="location" required>
+
+                <label for="date">Date:</label>
+                <input type="datetime-local" id="date" name="date" required>
+
+                <label for="link">More Info Link:</label>
+                <input type="url" id="link" name="link" required>
+
+                <input type="submit" value="Add Placement Drive">
+            </form>
+        </main>
+    </div>
+</body>
+</html>
