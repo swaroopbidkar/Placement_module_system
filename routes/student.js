@@ -100,4 +100,48 @@ router.post('/update', upload.fields([{ name: 'photo' }, { name: 'resume' }]), a
     }
 });
 
+
+
+const nodemailer = require('nodemailer');
+
+router.post('/sendnotification', async (req, res) => {
+    const { to, subject, message } = req.body;
+
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'your-email@gmail.com',        // Replace with your Gmail address
+                pass: 'your-app-password'            // Replace with your Gmail App Password
+            }
+        });
+
+        await transporter.sendMail({
+            from: '"Placement Cell" <your-email@gmail.com>',
+            to: to, // This will come from the select box in your form
+            subject: subject,
+            text: message
+        });
+
+        res.render('sendnotification', { success: true }); // Pass a success flag to EJS
+
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.render('sendnotification', { error: true }); // Pass an error flag to EJS
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;

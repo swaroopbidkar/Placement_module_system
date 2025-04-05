@@ -138,18 +138,48 @@
             border-collapse: collapse;
         }
 
-        th {
+        th, td {
             text-align: left;
             padding: 10px;
             border: 1px solid #ddd;
         }
 
-        td {
-            text-align: left;
-            padding: 10px;
-            border: 1px solid #ddd;
+        .download-wrapper {
+            position: relative;
+            display: inline-block;
+            float: right;
+            margin-top: 10px;
         }
 
+        .download-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .download-options {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            z-index: 10;
+            min-width: 180px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .download-options .option {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .download-options .option:hover {
+            background-color: #f0f0f0;
+        }
 
         @media (max-width: 768px) {
             main {
@@ -182,10 +212,9 @@
                 <ul>
                     <li><a href="#" style="text-decoration: underline;"><span class="icon">🏠</span>Dashboard</a></li>
                     <li><a href="/add-placement-drive"><span class="icon">📝</span>Add Placement Drive</a></li>
-                    <li><a href="/view-placement-details"><span class="icon">📝</span>View Placement
-                        Drive</a></li>
-                        <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
-                        <li><a href="/company/logout"><span class="icon">🚪</span>Log-Out</a></li>
+                    <li><a href="/view-placement-details"><span class="icon">📝</span>View Placement Drive</a></li>
+                    <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
+                    <li><a href="/company/logout"><span class="icon">🚪</span>Log-Out</a></li>
                 </ul>
             </nav>
         </aside>
@@ -199,6 +228,7 @@
 
             <div class="table-container">
                 <% Object.keys(groupedStudents).forEach(jobProfile => { %>
+                    <h3>Student Details</h3>
                     <h3>Job Profile: <%= jobProfile %></h3>
                     <table id="table-<%= jobProfile.replace(/\s+/g, '-') %>" class="display nowrap">
                         <thead>
@@ -228,6 +258,17 @@
                             <% }); %>
                         </tbody>
                     </table>
+
+                    <!-- DOWNLOAD BUTTON DROPDOWN -->
+                    <div class="download-wrapper">
+                        <button class="download-btn" data-table-id="table-<%= jobProfile.replace(/\s+/g, '-') %>">Download ⬇</button>
+                        <div class="download-options">
+                            <div class="option" data-format="pdf">📄 Download as PDF</div>
+                            <div class="option" data-format="excel">📊 Download as Excel</div>
+                            <div class="option" data-format="word">📝 Download as Word</div>
+                        </div>
+                    </div>
+
                     <br><br>
                 <% }); %>
             </div>
@@ -236,8 +277,15 @@
         </main>
     </div>
 
+    <!-- Required Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.4.1/html-docx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <script>
         $(document).ready(function () {
             <% Object.keys(groupedStudents).forEach(jobProfile => { %>
@@ -252,7 +300,51 @@
         function contactStudent(email) {
             window.location.href = `mailto:${email}`;
         }
+
+        document.querySelectorAll('.download-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const wrapper = this.parentElement;
+                const dropdown = wrapper.querySelector('.download-options');
+                document.querySelectorAll('.download-options').forEach(d => {
+                    if (d !== dropdown) d.style.display = 'none';
+                });
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.download-options').forEach(drop => drop.style.display = 'none');
+        });
+
+        document.querySelectorAll('.download-options .option').forEach(option => {
+            option.addEventListener('click', async function () {
+                const format = this.getAttribute('data-format');
+                const wrapper = this.closest('.download-wrapper');
+                const tableId = wrapper.querySelector('.download-btn').getAttribute('data-table-id');
+                const table = document.getElementById(tableId);
+
+                if (format === 'excel') {
+                    const wb = XLSX.utils.table_to_book(table, { sheet: "Students" });
+                    XLSX.writeFile(wb, `${tableId}.xlsx`);
+                } else if (format === 'pdf') {
+                    const { jsPDF } = window.jspdf;
+                    html2canvas(table).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        const pdf = new jsPDF('l', 'pt', 'a4');
+                        const imgProps = pdf.getImageProperties(imgData);
+                        const pdfWidth = pdf.internal.pageSize.getWidth();
+                        const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                        pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, imgHeight);
+                        pdf.save(`${tableId}.pdf`);
+                    });
+                } else if (format === 'word') {
+                    const content = `<html><body>${table.outerHTML}</body></html>`;
+                    const converted = window.htmlDocx.asBlob(content);
+                    saveAs(converted, `${tableId}.docx`);
+                }
+            });
+        });
     </script>
 </body>
-
 </html>

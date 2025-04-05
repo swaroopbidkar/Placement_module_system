@@ -189,6 +189,12 @@ const transporter = nodemailer.createTransport({
 });
 
 
+const notificationRoutes = require('./routes/notification');
+app.use('/', notificationRoutes);
+
+
+
+
 router.post('/change-password', async (req, res) => {
     try {
         const { oldPassword, newPassword, repeatPassword } = req.body;

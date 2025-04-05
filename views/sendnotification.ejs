@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Send Notification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    body {
+      display: flex;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    aside {
+      width: 250px;
+      background-color: #004d74;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      height: 100%;
+    }
+
+    aside .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    aside nav ul {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+    }
+
+    aside nav ul li {
+      margin-bottom: 20px;
+    }
+
+    aside nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+    }
+
+    aside nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    aside nav ul li a .icon {
+      margin-right: 10px;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .welcome-banner {
+      background-color: #004d74;
+      color: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-container {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .form-container h2 {
+      margin-bottom: 20px;
+      color: #004d74;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, textarea, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .alert {
+      padding: 10px;
+      margin-top: 10px;
+      font-weight: bold;
+      color: white;
+      border-radius: 5px;
+    }
+
+    .alert-success {
+      background-color: #28a745;
+    }
+
+    .alert-error {
+      background-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <aside>
+      <div class="logo">View Placements</div>
+      <nav>
+        <ul>
+          <li><a href="/teacher/dashboard"><span class="icon">🏠</span>Dashboard</a></li>
+          <li><a href="/view_student"><span class="icon">📝</span> Current Student Status</a></li>
+          <li><a href="/view-placements"><span class="icon">📅</span>View Placement Drives</a></li>
+          <li><a href="/add-placement-drive"><span class="icon">📝</span>Add Placement Drives</a></li>
+          <li><a href="/report"><span class="icon">📈</span>Placement Report</a></li>
+          <li><a href="#" style="text-decoration: underline;"><span class="icon">📤</span>Send Notification</a></li>
+          <li><a href="/change-password"><span class="icon">🔐</span>Change Password</a></li>
+          <li><a href="/teacher/logout"><span class="icon">🚪</span>Log-Out</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="welcome-banner">
+        <h2>Send Notification to Students</h2>
+        <p>Choose recipient and fill out the form to notify students.</p>
+      </section>
+
+      <div class="form-container">
+        <% if (success) { %>
+          <div class="alert alert-success">✅ Email sent successfully!</div>
+        <% } else if (error) { %>
+          <div class="alert alert-error">❌ Failed to send email. Please try again.</div>
+        <% } %>
+
+        <form action="/sendnotification" method="POST">
+          <label for="to">To</label>
+          <select name="to" id="to" multiple required>
+            <% students.forEach(student => { %>
+              <option value="<%= student.email %>"><%= student.name %> (<%= student.email %>)</option>
+            <% }) %>
+          </select>
+
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="Enter subject" required />
+
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="6" placeholder="Type your message here..." required></textarea>
+
+          <button type="submit">Send Notification</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#to').select2({
+        placeholder: "Select one or more students"
+      });
+    });
+  </script>
+</body>
+</html>
