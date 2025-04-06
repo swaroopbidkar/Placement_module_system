@@ -5,12 +5,11 @@ const placementSchema = new mongoose.Schema({
     jobProfile: String,
     description: String,
     location: String,
-    date: Date,
+    date: Date, // Must be a proper Date type
     link: String,
     companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' }
 });
 
-// Prevent model overwrite error
 const Placement = mongoose.models.Placement || mongoose.model('Placement', placementSchema);
 
 module.exports = Placement;

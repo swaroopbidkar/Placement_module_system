@@ -30,6 +30,8 @@ const User = require('./models/User'); // Adjust path based on your project
 const router = express.Router();
 
 
+
+
 mongoose.connect('mongodb://localhost:27017/placement', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -37,6 +39,10 @@ mongoose.connect('mongodb://localhost:27017/placement', {
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Error connecting to MongoDB:', err));
 
+// require('./cron/deleteOldPlacements');
+
+const deleteOldPlacements = require('./cron/deleteOldPlacements');
+deleteOldPlacements();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -126,6 +132,21 @@ const upload = multer({ storage: storage });
 
 
 
+// Auto-delete previous placement drives (older than previous month)
+
+const autoDeleteOldPlacements = async () => {
+    const today = new Date();
+    const firstDayOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastMonth = new Date(firstDayOfCurrentMonth.setMonth(firstDayOfCurrentMonth.getMonth() - 1));
+
+    try {
+        const result = await Placement.deleteMany({ date: { $lt: lastMonth } });
+        console.log(`Auto-cleanup: Deleted ${result.deletedCount} old placement drives.`);
+    } catch (error) {
+        console.error('Auto-cleanup failed:', error);
+    }
+};
+autoDeleteOldPlacements();
 
 
 
