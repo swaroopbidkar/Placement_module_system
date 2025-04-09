@@ -11,7 +11,7 @@ router.use(session({
 }));
 
 router.get('/login', (req, res) => {
-    res.render('company_login');
+    res.render('login');
 });
 
 
